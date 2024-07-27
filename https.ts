@@ -34,6 +34,19 @@ deno run --unstable --allow-net --allow-read https.ts
 import mediaTypes from "./mimeTypes.ts";
 
 Deno.serve({
+	port: 80,
+	hostname: "localhost",
+	onListen({ hostname, port }) { },
+}, async (request: Request) => {
+	return new Response("", {
+		status: 302,
+		headers: {
+			"location": new URL(new URL(request.url).pathname, "https://localhost/").href,
+		},
+	});
+});
+
+Deno.serve({
 	port: 443,
 	hostname: "localhost",
 	onListen({ hostname, port }) {
@@ -52,9 +65,9 @@ Deno.serve({
 		return new Response(await Deno.readFile(path), {
 			status: 200,
 			headers: new Headers({
-				"Content-Type": mediaTypes[fileExtension] ?? `text/${fileExtension?.match(/\.(?<end>\w+$)/)?.groups?.end || "plain"}; charset=utf-8`,
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Private-Network": "true",
+				"content-type": mediaTypes[fileExtension] ?? `text/${fileExtension?.match(/\.(?<end>\w+$)/)?.groups?.end || "plain"};charset=utf-8`,
+				"access-control-allow-origin": "*",
+				"access-control-allow-private-network": "true",
 			}),
 		});
 	} catch (err) {
@@ -66,7 +79,7 @@ Deno.serve({
 			return new Response("", {
 				status: 302,
 				headers: new Headers({
-					"Location": path + "/",
+					"location": path + "/",
 				}),
 			});
 		}
@@ -77,7 +90,7 @@ Deno.serve({
 			return new Response((url.protocol === "file:") ? (await Deno.readTextFile(url)) : (await (await globalThis.fetch(url)).text()), {
 				status: 200,
 				headers: new Headers({
-					"Content-Type": "image/svg+xml; charset=utf-8",
+					"content-type": "image/svg+xml;charset=utf-8",
 				}),
 			});
 		}
@@ -94,7 +107,7 @@ Deno.serve({
 			{
 				status: 404,
 				headers: new Headers({
-					"Content-Type": "text/html; charset=utf-8",
+					"content-type": "text/html;charset=utf-8",
 				}),
 			},
 		);

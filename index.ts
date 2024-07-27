@@ -1,9 +1,9 @@
 
 /*
 
-deno run --unstable --allow-net --allow-read index.ts
-deno install --unstable --allow-net --allow-read --name=serve --force index.ts
-deno install --unstable --allow-net --allow-read --name=serve --force --reload https://benjaminaster.com/server/index.ts
+deno run --allow-net --allow-read index.ts
+deno install --allow-net --allow-read --name=serve --force index.ts
+deno install --allow-net --allow-read --name=serve --force --reload https://benjaminaster.com/server/index.ts
 
 */
 
@@ -18,16 +18,24 @@ Deno.serve({
 	const pathname = globalThis.decodeURIComponent(new URL(request.url).pathname);
 	let path = "." + pathname;
 	if (path.endsWith("/")) path += "index.html";
-	console.log(pathname);
+	// console.log(pathname);
+
+	console.log("-------------------------------------------");
+	console.log(`${request.method} ${request.url}\n` + [...request.headers.entries()].map(([key, value]) => `${key}: ${value}`).join("\n") + "\n\n" + (request.body ? (await request.text()) : ""));
 
 	try {
 		const fileExtension = path.match(/\.[a-z]+$/)?.[0];
+		const contentType = fileExtension === ".md"
+			? "text/html; charset=utf-8"
+			: mediaTypes[fileExtension] ?? `text/${fileExtension?.match(/\.(?<end>\w+$)/)?.groups?.end || "plain"};charset=utf-8`;
 		return new Response(await Deno.readFile(path), {
 			status: 200,
 			headers: new Headers({
-				"Content-Type": mediaTypes[fileExtension] ?? `text/${fileExtension?.match(/\.(?<end>\w+$)/)?.groups?.end || "plain"}; charset=utf-8`,
+				"Content-Type": contentType,
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Private-Network": "true",
+				// "Cross-Origin-Opener-Policy": "same-origin",
+				// "Cross-Origin-Embedder-Policy": "require-corp",
 			}),
 		});
 	} catch (err) {
