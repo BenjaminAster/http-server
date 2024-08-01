@@ -1,0 +1,30 @@
+{
+	"name": "@benjaminaster/http-server",
+	"version": "0.0.3",
+	"description": "A teeny-tiny HTTP web server",
+	"type": "module",
+	"bin": {
+		"serve": "./dist/index.js"
+	},
+	"main": "",
+	"scripts": {
+		"build": "tsc --build .",
+		"build:watch": "tsc --build . --watch",
+		"start": "node ./dist/index.js"
+	},
+	"devDependencies": {
+		"@benjaminaster/mime-types": "^0.0.2",
+		"selfsigned": "^2.4.1"
+	},
+	"types": "./dist/index.d.ts",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/BenjaminAster/http-server.git"
+	},
+	"author": "Benjamin Aster",
+	"license": "WTFPL",
+	"bugs": {
+		"url": "https://github.com/BenjaminAster/http-server/issues"
+	},
+	"homepage": "https://github.com/BenjaminAster/http-server#readme"
+}
