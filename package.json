@@ -1,12 +1,11 @@
 {
 	"name": "@benjaminaster/http-server",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "A teeny-tiny HTTP web server",
 	"type": "module",
 	"bin": {
 		"serve": "./dist/index.js"
 	},
-	"main": "",
 	"scripts": {
 		"build": "tsc --build .",
 		"build:watch": "tsc --build . --watch",
@@ -16,7 +15,6 @@
 		"@benjaminaster/mime-types": "^0.0.2",
 		"selfsigned": "^2.4.1"
 	},
-	"types": "./dist/index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/BenjaminAster/http-server.git"

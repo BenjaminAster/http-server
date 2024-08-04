@@ -25,4 +25,5 @@
 		"skipDefaultLibCheck": true,
 		"noEmitOnError": true,
 	},
+	"exclude": ["./dist/"],
 }
